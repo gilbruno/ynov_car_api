@@ -7,3 +7,6 @@ Content-type : application/json
     "password": "test"
 
 }
+
+### GET USER BY ID
+GET http://localhost:3000/auth/10
