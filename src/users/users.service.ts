@@ -21,15 +21,31 @@ export class UsersService {
     }
 
     find(email: string) {
-        const user = this.repo.findOneBy({email})
-        return user
+        const users = this.repo.findBy({email})
+        return users
     }
 
-    update(id: number, attr: Partial<User>) {
-
+    findAll() {
+        const users = this.repo.find()
+        return users
     }
 
-    remove() {
+    async update(id: number, attr: Partial<User>) {
+        const user = await this.findOne(id)
+        if (!user) {
+            throw new Error('User not found')
+        }
+        //Override properties of found user by new props
+        Object.assign(user, attr)
+        return this.repo.save(user)
+    }
 
+    async remove(id: number) {
+        const user = await this.findOne(id)
+        if (!user) {
+            throw new Error('User not found')
+        }
+        await this.repo.remove(user)
+        return `User ${id} removed`
     }    
 }
