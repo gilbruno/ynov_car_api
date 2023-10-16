@@ -11,10 +11,11 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
+import { Serialize, SerializeInterceptor } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
 
     constructor(private usersService: UsersService) {
@@ -27,7 +28,6 @@ export class UsersController {
     }
 
     @Get('/:id')
-    @UseInterceptors(new SerializeInterceptor(UserDto))
     findById(@Param('id') id: number) {
         console.log("HANDLER findById !")
         const user = this.usersService.findOne(id)
