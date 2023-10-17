@@ -13,13 +13,18 @@ POST http://localhost:3000/auth/signin
 Content-type : application/json
 
 {
-    "email": "john7@yahoo.fr",
+    "email": "john6@yahoo.fr",
     "password": "test"
 
 }
 
+### GET the current signed in user
+GET http://localhost:3000/auth/whoAmI
+
+
 ### GET USER BY ID
 GET http://localhost:3000/auth/10
+
 
 ### GET ALL USERS
 GET http://localhost:3000/auth?all
