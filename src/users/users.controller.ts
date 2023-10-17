@@ -2,9 +2,7 @@ import {
     Body, 
     Controller, 
     Get, Param, Post, Patch, Query, Delete, 
-    NotFoundException,
-    UseInterceptors,
-    ClassSerializerInterceptor
+    NotFoundException
 } 
     from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
