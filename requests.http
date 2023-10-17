@@ -8,6 +8,17 @@ Content-type : application/json
 
 }
 
+### SIGNIN
+POST http://localhost:3000/auth/signin
+Content-type : application/json
+
+{
+    "email": "john7@yahoo.fr",
+    "password": "test"
+
+}
+
+
 ### GET USER BY ID
 GET http://localhost:3000/auth/10
 

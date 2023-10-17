@@ -27,6 +27,11 @@ export class UsersController {
         return this.authService.signup(body.email,body.password)
     }
 
+    @Post('/signin')
+    signin(@Body() body: CreateUserDto) {
+        return this.authService.signin(body.email,body.password)
+    }
+
     @Get('/:id')
     findById(@Param('id') id: number) {
         console.log("HANDLER findById !")
