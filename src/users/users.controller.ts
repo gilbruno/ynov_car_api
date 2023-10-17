@@ -2,7 +2,7 @@ import {
     Body, 
     Controller, 
     Get, Param, Post, Patch, Query, Delete, 
-    NotFoundException
+    NotFoundException, Session
 } 
     from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -30,6 +30,16 @@ export class UsersController {
     @Post('/signin')
     signin(@Body() body: CreateUserDto) {
         return this.authService.signin(body.email,body.password)
+    }
+
+    @Get('/colors/:color')
+    setColor(@Param('color') color: string, @Session() session: any) {
+        session.color = color
+    }
+
+    @Get('/colors')
+    getColor(@Session() session: any) {
+        return session.color
     }
 
     @Get('/:id')

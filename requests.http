@@ -18,7 +18,6 @@ Content-type : application/json
 
 }
 
-
 ### GET USER BY ID
 GET http://localhost:3000/auth/10
 
@@ -38,4 +37,12 @@ Content-Type: application/json
 {
     "email": "john@yahoo.fr"
 }
+
+### SET COLOR
+
+GET http://localhost:3000/auth/colors/blue
+
+### GET COLOR
+
+GET http://localhost:3000/auth/colors
 
