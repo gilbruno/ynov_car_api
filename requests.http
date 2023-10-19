@@ -22,7 +22,7 @@ Content-type : application/json
 POST http://localhost:3000/auth/signout
 Content-type : application/json
 
-### GET the current signed in user
+### WHOAMI ==> GET the current signed in user 
 GET http://localhost:3000/auth/whoAmI
 
 
