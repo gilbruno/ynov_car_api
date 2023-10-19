@@ -15,8 +15,11 @@ export class UsersService {
         return this.repo.save(user)
     }
 
-    findOne(id: number) {
-        const user = this.repo.findOneBy({id})
+    async findOne(id: number) {
+        if (!id) {
+            return null
+        }
+        const user = await this.repo.findOneBy({id})
         return user
     }
 

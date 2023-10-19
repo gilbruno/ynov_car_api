@@ -36,9 +36,14 @@ export class UsersController {
         return user
     }
 
+    @Post('/signout')
+    async signout(@Session() session: any) {
+        session.userId = null
+    }
+
     @Get('/whoAmI')
-    whoAmI(@Session() session: any) {
-        return this.usersService.findOne(session.userId)
+    async whoAmI(@Session() session: any) {
+        return await this.usersService.findOne(session.userId)
     }
 
     @Get('/colors/:color')
