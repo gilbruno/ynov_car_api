@@ -53,6 +53,23 @@ describe('AuthService', () => {
     )
 
     //--------------------------------------------------------------
+       it('throws an error if a user signs up with email that is in use ', 
+       async () => {
+           fakeUsersService.find = () => 
+               Promise.resolve([
+                   {
+                       id: 1,
+                       email : 'gb@yahoo.fr',
+                       password: 'test_gb'
+                   } as User
+               ])
+
+           await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+               new BadRequestException('email in use'),
+           );
+       }
+   )
+    //--------------------------------------------------------------
     it('throws an error if a signin is called with an unused email', 
         async () => {
             await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
@@ -61,6 +78,14 @@ describe('AuthService', () => {
         }
     )
 
+    //--------------------------------------------------------------
+    it('throws an error if a password is incorrect', 
+        async () => {
+            await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+                new NotFoundException('user not found'),
+            );
+        }
+    )
 
 })
 
