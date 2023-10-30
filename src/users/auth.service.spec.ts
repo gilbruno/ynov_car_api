@@ -11,10 +11,29 @@ describe('AuthService', () => {
 
     //--------------------------------------------------------------
     beforeEach(async () => {
+        const users: User[] = []
         //1. Create a fake copy of the user service
         fakeUsersService = {
-            find: () => Promise.resolve([]),
-            create: (email: string, password: string) => Promise.resolve({id: 1, email, password} as User)
+            find: (email: string) => {
+                const filteredUsers = users.filter(
+                    user => {
+                        return user.email === email
+                    }
+                )
+                return Promise.resolve(
+                    filteredUsers
+                )
+            },
+            create: (email: string, password: string) => {
+                const user = {
+                    id: Math.floor(Math.random() * 999999), 
+                    email, 
+                    password
+                } as User
+                users.push(user)
+                return Promise.resolve(user)
+            }
+                
         }
 
         //2. Create a Module with AutService & UsersService as provider
@@ -53,22 +72,33 @@ describe('AuthService', () => {
     )
 
     //--------------------------------------------------------------
-       it('throws an error if a user signs up with email that is in use ', 
-       async () => {
-           fakeUsersService.find = () => 
-               Promise.resolve([
-                   {
-                       id: 1,
-                       email : 'gb@yahoo.fr',
-                       password: 'test_gb'
-                   } as User
-               ])
+//     it('throws an error if a user signs up with email that is in use ', 
+//        async () => {
+//            fakeUsersService.find = () => 
+//                Promise.resolve([
+//                    {
+//                        id: 1,
+//                        email : 'gb@yahoo.fr',
+//                        password: 'test_gb'
+//                    } as User
+//                ])
 
-           await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
-               new BadRequestException('email in use'),
-           )
-       }
+//            await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+//                new BadRequestException('email in use'),
+//            )
+//        }
+//    )
+
+    //--------------------------------------------------------------
+    it('throws an error if a user signs up with email that is in use ', 
+        async () => {
+            await service.signup('gb@yahoo.fr', 'asdf')
+            await expect(service.signup('gb@yahoo.fr', 'toto')).rejects.toThrow(
+                new BadRequestException('email in use'),
+            )
+        }
    )
+
     //--------------------------------------------------------------
     it('throws an error if a signin is called with an unused email', 
         async () => {
@@ -79,35 +109,54 @@ describe('AuthService', () => {
     )
 
     //--------------------------------------------------------------
+    // it('throws an error if a password is incorrect during signin', 
+    //     async () => {
+    //         fakeUsersService.find = () => 
+    //         Promise.resolve([
+    //             {
+    //                 id: 1,
+    //                 email : 'gb@yahoo.fr',
+    //                 password: 'test_gb'
+    //             } as User
+    //         ])
+
+    //         await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+    //             new BadRequestException('Bad user/password combination'),
+    //         )
+    //     }
+    // )
+
+    //--------------------------------------------------------------
     it('throws an error if a password is incorrect during signin', 
         async () => {
-            fakeUsersService.find = () => 
-            Promise.resolve([
-                {
-                    id: 1,
-                    email : 'gb@yahoo.fr',
-                    password: 'test_gb'
-                } as User
-            ])
-
-            await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+            await service.signup('gb@yahoo.fr', 'test123')
+            await expect(service.signin('gb@yahoo.fr', 'test124')).rejects.toThrow(
                 new BadRequestException('Bad user/password combination'),
             )
         }
     )
 
     //--------------------------------------------------------------
+    // it('returns a user if a correct password is provided during signin', 
+    //     async () => {
+    //         fakeUsersService.find = () => 
+    //         Promise.resolve([
+    //             {
+    //                 id: 1,
+    //                 email : 'gb@yahoo.fr',
+    //                 password: 'fd16272a056aa337.6ac3452c6beb6ee916c4dfb70a825ffa020fc8f1c2711b0e54041ca8649265d1'
+    //             } as User
+    //         ])
+
+    //         const user = await service.signin('gb@yahoo.fr', 'password')
+    //         expect(user).toBeDefined()
+    //     }
+    // )
+
+    //--------------------------------------------------------------
     it('returns a user if a correct password is provided during signin', 
         async () => {
-            fakeUsersService.find = () => 
-            Promise.resolve([
-                {
-                    id: 1,
-                    email : 'gb@yahoo.fr',
-                    password: 'fd16272a056aa337.6ac3452c6beb6ee916c4dfb70a825ffa020fc8f1c2711b0e54041ca8649265d1'
-                } as User
-            ])
-
+            await service.signup('gb@yahoo.fr', 'password')
             const user = await service.signin('gb@yahoo.fr', 'password')
             expect(user).toBeDefined()
         }
