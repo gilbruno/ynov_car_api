@@ -79,13 +79,23 @@ describe('AuthService', () => {
     )
 
     //--------------------------------------------------------------
-    it('throws an error if a password is incorrect', 
+    it('throws an error if a password is incorrect during signin', 
         async () => {
+            fakeUsersService.find = () => 
+            Promise.resolve([
+                {
+                    id: 1,
+                    email : 'gb@yahoo.fr',
+                    password: 'test_gb'
+                } as User
+            ])
+
             await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
-                new NotFoundException('user not found'),
+                new BadRequestException('Bad user/password combination'),
             );
         }
     )
+    
 
 })
 
