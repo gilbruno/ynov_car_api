@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing'
 import { AuthService } from './auth.service'
 import {UsersService } from './users.service' 
 import { User } from './user.entity'
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, NotFoundException } from '@nestjs/common'
 
 let service:  AuthService
 let fakeUsersService: Partial<UsersService>
@@ -53,21 +53,14 @@ describe('AuthService', () => {
     )
 
     //--------------------------------------------------------------
-    it('throws an error if a user signs up with email that is in use ', 
+    it('throws an error if a signin is called with an unused email', 
         async () => {
-            fakeUsersService.find = () => 
-                Promise.resolve([
-                    {
-                        id: 1,
-                        email : 'gb@yahoo.fr',
-                        password: 'test_gb'
-                    } as User
-                ])
-                await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
-                    new BadRequestException('email in use'),
-              );
+            await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+                new NotFoundException('user not found'),
+            );
         }
     )
+
 
 })
 
