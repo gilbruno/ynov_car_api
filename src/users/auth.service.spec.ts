@@ -2,15 +2,17 @@ import { Test } from '@nestjs/testing'
 import { AuthService } from './auth.service'
 import {UsersService } from './users.service' 
 import { User } from './user.entity'
+import { BadRequestException } from '@nestjs/common'
 
 let service:  AuthService
+let fakeUsersService: Partial<UsersService>
 
 describe('AuthService', () => {
 
     //--------------------------------------------------------------
     beforeEach(async () => {
         //1. Create a fake copy of the user service
-        const fakeUsersService: Partial<UsersService> = {
+        fakeUsersService = {
             find: () => Promise.resolve([]),
             create: (email: string, password: string) => Promise.resolve({id: 1, email, password} as User)
         }
@@ -35,6 +37,35 @@ describe('AuthService', () => {
     it('can create an instance of AuthService', 
         async () => {
             expect(service).toBeDefined()
+        }
+    )
+
+    //--------------------------------------------------------------
+    it('creates a new user with salted and hashed password', 
+        async () => {
+            const password = 'test123'
+            const user = await service.signup('gb@yahoo.fr', password)
+            expect(user.password).not.toEqual(password)
+            const [salt, hash] = user.password.split('.')
+            expect(salt).toBeDefined()
+            expect(hash).toBeDefined()
+        }
+    )
+
+    //--------------------------------------------------------------
+    it('throws an error if a user signs up with email that is in use ', 
+        async () => {
+            fakeUsersService.find = () => 
+                Promise.resolve([
+                    {
+                        id: 1,
+                        email : 'gb@yahoo.fr',
+                        password: 'test_gb'
+                    } as User
+                ])
+                await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
+                    new BadRequestException('email in use'),
+              );
         }
     )
 
