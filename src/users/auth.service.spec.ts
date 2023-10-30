@@ -66,7 +66,7 @@ describe('AuthService', () => {
 
            await expect(service.signup('gb@yahoo.fr', 'asdf')).rejects.toThrow(
                new BadRequestException('email in use'),
-           );
+           )
        }
    )
     //--------------------------------------------------------------
@@ -74,7 +74,7 @@ describe('AuthService', () => {
         async () => {
             await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
                 new NotFoundException('user not found'),
-            );
+            )
         }
     )
 
@@ -92,10 +92,26 @@ describe('AuthService', () => {
 
             await expect(service.signin('gb@yahoo.fr', 'asdf')).rejects.toThrow(
                 new BadRequestException('Bad user/password combination'),
-            );
+            )
         }
     )
-    
+
+    //--------------------------------------------------------------
+    it('returns a user if a correct password is provided during signin', 
+        async () => {
+            fakeUsersService.find = () => 
+            Promise.resolve([
+                {
+                    id: 1,
+                    email : 'gb@yahoo.fr',
+                    password: 'fd16272a056aa337.6ac3452c6beb6ee916c4dfb70a825ffa020fc8f1c2711b0e54041ca8649265d1'
+                } as User
+            ])
+
+            const user = await service.signin('gb@yahoo.fr', 'password')
+            expect(user).toBeDefined()
+        }
+    )
 
 })
 
