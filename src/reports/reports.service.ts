@@ -15,6 +15,6 @@ export class ReportsService {
     create(reportDto: CreateReportDto, user: User) {
         const report = this.repo.create(reportDto)
         report.user = user
-        this.repo.save
+        return this.repo.save(report)
     }
 }
