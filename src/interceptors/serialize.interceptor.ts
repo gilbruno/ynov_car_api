@@ -13,7 +13,7 @@ interface Classconstructor {
     new (...args: any): {}
 }
 export function Serialize(dto: Classconstructor) {
-    return UseInterceptors(new SerializeInterceptor(UserDto))
+    return UseInterceptors(new SerializeInterceptor(dto))
 }
 export class SerializeInterceptor implements NestInterceptor {
 
