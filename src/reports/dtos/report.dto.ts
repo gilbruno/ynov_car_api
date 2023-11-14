@@ -1,5 +1,4 @@
 import { Expose, Transform } from "class-transformer";
-import { User } from "../../users/user.entity";
 
 export class ReportDto {
 
@@ -19,6 +18,7 @@ export class ReportDto {
     model: string;
     @Expose()
     mileage: number;
+
     @Transform(({obj}) => obj.user.id)
     @Expose()
     userId: number; 

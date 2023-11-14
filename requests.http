@@ -5,7 +5,6 @@ Content-type : application/json
 {
     "email": "john7@yahoo.fr",
     "password": "test"
-
 }
 
 ### SIGNIN
@@ -49,7 +48,7 @@ Content-Type: application/json
 
 ### SET COLOR
 
-GET http://localhost:3000/auth/colors/blue
+GET http://localhost:3000/auth/colors/yellow
 
 ### GET COLOR
 
