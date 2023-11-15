@@ -24,4 +24,4 @@ Content-Type: application/json
 
 
 ### GET AN ESTIMATE FOR EXISTING VEHICLE
-GET http://localhost:3000/reports?make=toyota&model=corolla&lng=0&lat=0&mileage=20000&year=2002
+GET http://localhost:3000/reports?make=Ford&model=Fiesta&lng=0&lat=5&mileage=20000&year=2018
