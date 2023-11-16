@@ -26,6 +26,12 @@ export class ReportsService {
             .getRawMany()
     }
 
+    getStatsCars() {
+        return this.repo.createQueryBuilder()
+            .select('make, SUM(price)', 'totalPrice')
+            .groupBy('make')
+            .getRawMany()
+    }
 
     create(reportDto: CreateReportDto, user: User) {
         const report = this.repo.create(reportDto)

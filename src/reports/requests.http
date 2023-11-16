@@ -25,3 +25,7 @@ Content-Type: application/json
 
 ### GET AN ESTIMATE FOR EXISTING VEHICLE
 GET http://localhost:3000/reports?make=Ford&model=Fiesta&lng=0&lat=5&mileage=20000&year=2018
+
+### GET STATS
+GET http://localhost:3000/reports/stats
+

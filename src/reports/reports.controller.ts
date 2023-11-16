@@ -32,4 +32,11 @@ export class ReportsController {
     approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
         return this.reportsService.changeApproval(id, body.approved)
     }
+
+    @Get('stats')
+    @UseGuards(AdminGuard)
+    getStatsCars() {
+        return this.reportsService.getStatsCars()
+    }
+
 }
